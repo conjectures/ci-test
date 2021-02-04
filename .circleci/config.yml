@@ -1,17 +1,24 @@
 version: 2.1
-orbs:
-  node: circleci/node@4.1.0   # install Node.js pkg managers and other packages with caching enabled.
 jobs:
-  test:
-    executor:
-      name: node/default
-      tag: '10.4'
+  build_test:
+    docker:
+      - image: node:10.19.0
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using latest cache if no exact match is found
+            - v1-dependencies-
       - run: npm run test
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      # Run tests
+            - run: npm test
+
   build_deploy:
     machine:
       image: ubuntu-2004:202010-01
