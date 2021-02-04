@@ -3,6 +3,7 @@ jobs:
   build_test:
     docker:
       - image: node:10.19.0
+    working_directory: ./app
     steps:
       - checkout
       - run: npm install
