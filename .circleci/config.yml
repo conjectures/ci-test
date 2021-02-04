@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@4.1.0   # install Node.js pkg managers and other packages with caching enabled.
 jobs:
-  build:
+  test:
     executor:
       name: node/default
       tag: '10.4'
@@ -12,3 +12,30 @@ jobs:
           steps:
             - run: npm install
       - run: npm run test
+  build_deploy:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run:
+          name: Installing AWS CLI
+          command:
+            sudo apt-get update
+            sudo apt install python3-pip
+            sudo pip3 install awsebcli --upgrade
+      - run:
+          name: Checking if dirs & build
+          command:
+            cd ./app && npm install && npm run build
+      - run:
+          name: Sync with bucket
+          command:
+            aws s3 sync ./app/build s3://circleci-ci-test-bucket
+
+workflows:
+  version: 2
+  execute_bulk:
+    jobs:
+      - test
+      - build_deploy
+
