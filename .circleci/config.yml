@@ -10,14 +10,14 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             # fallback to using latest cache if no exact match is found
             - v1-dependencies-
-      - run: npm run test
+      - run: npm install
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       # Run tests
-            - run: npm test
+      - run: npm test
 
   build_deploy:
     machine:
