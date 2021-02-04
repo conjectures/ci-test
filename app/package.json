@@ -1,0 +1,26 @@
+{
+  "name": "hello-world-express",
+  "version": "0.0.1",
+  "description": "Hello world test app",
+  "main": "app.js",
+  "directories": {},
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/conjectures/ci-test.git"
+  },
+  "author": "conjectures",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/conjectures/ci-test/issues"
+  },
+  "homepage": "https://github.com/conjectures/ci-test#readme"
+}
