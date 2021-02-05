@@ -35,5 +35,5 @@ workflows:
           dockerfile: build/Dockerfile
           path: .
           requires:
-            - test
+            - build_test
 
