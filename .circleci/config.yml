@@ -24,28 +24,8 @@ jobs:
       - store_test_results:
           path: /tmp/test-results
 
-  build_deploy:
-    docker:
-      - image:  circleci/node:10
-    steps:
-      - checkout
-      - run:
-          name: Installing AWS CLI
-          command: |
-            sudo apt-get update
-            sudo apt install python3-pip -y
-            sudo pip3 install awsebcli --upgrade
-      - run:
-          name: Checking if dirs & build
-          command:
-            cd ./app && npm install && npm run build
-      - run:
-          name: Sync with bucket
-          command:
-            aws s3 sync ./app/build s3://circleci-ci-test-bucket
-
 workflows:
-  execute_bulk:
+  node-tests:
     jobs:
       - build_test
         # Envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ECR_ACCOUNT_URL
