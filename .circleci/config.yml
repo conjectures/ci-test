@@ -1,19 +1,31 @@
 version: 2.1
+
+orbs:
+  node: circleci/node@4.1.0
+  aws-ecr:  circleci/aws-ecr@6.15.3
+  aws-ecs:  circleci/aws-ecs@1.4.0
+
 jobs:
   build_test:
-    docker:
-      - image: node:10.19.0
-    working_directory: ~/app
+    executor:
+      name: node/default
+      tag: 14.15.4
     steps:
       - checkout
-      - run: npm install
-
-      # Run tests
-      - run: npm test
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Run Unit Tests
+          command: npm test
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: raw-test-ouput
+      - store_test_results:
+          path: /tmp/test-results
 
   build_deploy:
-    machine:
-      image: ubuntu-2004:202010-01
+    docker:
+      - image:  circleci/node:10
     steps:
       - checkout
       - run:
@@ -32,9 +44,7 @@ jobs:
             aws s3 sync ./app/build s3://circleci-ci-test-bucket
 
 workflows:
-  version: 2
   execute_bulk:
     jobs:
       - build_test
-      - build_deploy
 
