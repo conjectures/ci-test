@@ -17,7 +17,7 @@ jobs:
           app-dir: app/
       - run:
           name: Run Unit Tests
-          command: npm test
+          command: cd app && npm test
       - store_artifacts:
           path: /tmp/test-results
           destination: raw-test-ouput
